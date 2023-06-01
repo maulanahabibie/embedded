@@ -10,7 +10,7 @@ const NavLinks = ({ toggleSidebar }) => {
           <NavLink
             to={path}
             className={({ isActive }) => {
-              return isActive ? 'nav-link active' : 'nav-link';
+              return isActive ? 'nav-link active bg-white fw-bold' : 'nav-link text-white';
             }}
             key={id}
             onClick={toggleSidebar}

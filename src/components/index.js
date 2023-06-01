@@ -8,6 +8,9 @@ import Navbar from './Navbar';
 import SearchContainer from './SearchContainer';
 import SmallSidebar from './SmallSidebar';
 import StatsContainer from './StatsContainer';
+import DateRange from './DateRange';
+import Search from './Search';
+import { ModalCategory } from './modal';
 
 export {
   Logo,
@@ -20,4 +23,7 @@ export {
   SearchContainer,
   StatsContainer,
   ChartsContainer,
+  DateRange,
+  Search,
+  ModalCategory
 };

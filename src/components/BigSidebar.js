@@ -11,8 +11,8 @@ const BigSidebar = () => {
       <div
         className={
           isSidebarOpen
-            ? 'sidebar-container '
-            : 'sidebar-container show-sidebar'
+            ? 'sidebar-container bg-primary'
+            : 'sidebar-container show-sidebar bg-primary'
         }
       >
         <div className='content'>
