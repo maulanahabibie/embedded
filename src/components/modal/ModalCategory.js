@@ -17,7 +17,7 @@ const ModalCategory = ({
                 <div>
                     <h3 className="card-label fw-bold">{type} Departements</h3>
                     <span className="form-text text-muted">
-                        Form Input Departements
+                        Form Input Departements  
                     </span>
                 </div>
             </div>
