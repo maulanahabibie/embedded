@@ -15,16 +15,16 @@ const initialModal = {
     onSubmit:()=>{}
 }
 const initialDataForm = {
-    categoryName: "",
-    categoryRoute: "",
-    categoryUser: "",
+    departementName: "",
+    departementRoute: "",
+    departementPublish: "",
     slug: "",
 }
 
 const dataCategories = [
-    { categoryRoute: "/category/tableau",     publish: "13-04-1995", categoryName: "Tableau"      , slug: "CATE98723450101"},
-    { categoryRoute: "/category/powerbi",     publish: "13-04-1995", categoryName: "Power BI"     , slug: "CATE98723450102"},
-    { categoryRoute: "/category/smart-energy",publish: "13-04-1995", categoryName: "Smart Energy" , slug: "CATE98723450103"},
+    { departementRoute: "/departement/tableau",     departementPublish: "13-04-1995", departementName: "Tableau"      , slug: "CATE98723450101"},
+    { departementRoute: "/departement/powerbi",     departementPublish: "13-04-1995", departementName: "Power BI"     , slug: "CATE98723450102"},
+    { departementRoute: "/departement/smart-energy",departementPublish: "13-04-1995", departementName: "Smart Energy" , slug: "CATE98723450103"},
 ]
 const sw = new MySwal()
 const Category = () => {
@@ -54,7 +54,7 @@ const Category = () => {
         setIsLoading(true)
         if(search !== ''){
             const newState = datasReal.filter(f=>{
-                return `${f.category}`.toLowerCase().includes(search.toLowerCase())
+                return `${f.departementName}`.toLowerCase().includes(search.toLowerCase())
             })
             setDatas(newState)
             
@@ -115,9 +115,9 @@ const Category = () => {
             const find = datasReal.find(f=>f.slug===slug)
             setDataForm((old)=>({
                 ...old,
-                categoryName  : find.categoryName || "",
-                categoryRoute : find.categoryRoute || "",
-                categoryUser  : find.categoryUser || "",
+                departementName  : find.departementName || "",
+                departementRoute : find.departementRoute || "",
+                departementPublish  : find.departementPublish || "",
             }))
             setModal((old)=>({
                 ...old,
@@ -130,9 +130,9 @@ const Category = () => {
             const find = datasReal.find(f=>f.slug===slug)
             setDataForm((old)=>({
                 ...old,
-                categoryName  : find.categoryName || "",
-                categoryRoute : find.categoryRoute || "",
-                categoryUser  : find.categoryUser || "",
+                departementName  : find.departementName || "",
+                departementRoute : find.departementRoute || "",
+                departementPublish  : find.departementPublish || "",
             }))
             setModal((old)=>({
                 ...old,
@@ -162,13 +162,13 @@ const Category = () => {
     <Wrapper className='p-4'>
         <div className="d-flex justify-content-between align-items-center flex-wrap mb-md-5">
             <div>
-                <h3 className="card-label fw-bold">Categeories</h3>
+                <h3 className="card-label fw-bold">Departements</h3>
                 <span className="form-text text-muted">
-                    Data List Categories
+                    Data List Departements
                 </span>
             </div>
             <div>
-                <Button onClick={()=>onShowModal('create')} className="btn btn-primary font-weight-bold">
+                <Button onClick={()=>onShowModal('create')} className="btn btn-danger font-weight-bold">
                     Create New
                 </Button>
             </div>
@@ -195,10 +195,10 @@ const Category = () => {
                 fontFamily: "normal normal medium 15px/23px Poppins",
                 display: 'block !important',
             }}>
-                <thead className='fw-bold '>
-                    <tr className='table-primary'>
+                <thead className='fw-bold table-danger '>
+                    <tr className=''>
                         <td width="5%"  className='p-3'>No</td>
-                        <td width="40%" className='p-3'>Catgeories</td>
+                        <td width="40%" className='p-3'>Departement</td>
                         <td width="20%" className='p-3'>Publish</td>
                         <td width="10%" className='p-3'>Action</td>
                     </tr>
@@ -210,10 +210,10 @@ const Category = () => {
                         <tbody key={i}>
                             <tr>
                                 <td width="5%"  className='p-3'>{i+1}</td>
-                                <td width="40%" className='p-3'>{d.categoryName}</td>
-                                <td width="20%" className='p-3'>{d.publish}</td>
+                                <td width="20%" className='p-3'>{d.departementName}</td>
+                                <td width="20%" className='p-3'>{d.departementPublish}</td>
                                 <td width="10%" className='p-3'>
-                                    <div className='btn btn-outline-success me-2'><FiExternalLink onClick={()=>onLinkButton(d.categoryRoute)}          /></div>
+                                    <div className='btn btn-outline-success me-2'><FiExternalLink onClick={()=>onLinkButton(d.departementRoute)}          /></div>
                                     <div className='btn btn-outline-primary me-2'><GrEdit onClick={()=>onShowModal('edit', d.slug)}                    /></div>
                                     <div className='btn btn-outline-danger'><FaEraser onClick={()=>onShowModal('delete', d.slug)}                      /></div>
                                 </td>

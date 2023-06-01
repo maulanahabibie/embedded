@@ -26,7 +26,7 @@ const Search = ({
             </div>
             <div className='col-2 p-0'>
                 <button
-                    className="btn btn-primary font-weight-bold"
+                    className="btn btn-danger font-weight-bold"
                     onClick={()=>handleSubmit()}
                     >
                     Search

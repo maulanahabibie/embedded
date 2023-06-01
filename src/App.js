@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { Landing, Error, Register, ProtectedRoute } from './pages';
+import { Landing, Error, Register, ProtectedRoute, AllData } from './pages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -25,8 +25,9 @@ function App() {
         >
           <Route index element={<Stats />} />
           <Route path='profile' element={<Profile />} />
-          <Route path='category' element={<Category />} />
-          <Route path='category/:viewType' element={<Embedded />} />
+          <Route path='alldata' element={<AllData />} />
+          <Route path='departement' element={<Category />} />
+          <Route path='departement/:viewType' element={<Embedded />} />
           <Route path='admin' element={<Admin />} />
         </Route>
         <Route path='landing' element={<Landing />} />

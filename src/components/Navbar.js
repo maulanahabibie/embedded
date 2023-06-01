@@ -22,7 +22,7 @@ const Navbar = () => {
         </button>
         <div>
           <Logo />
-          <h3 className='logo-text fw-bold'>Embedded App</h3>
+          <h3 className='logo-text fw-bold'>CMS Portal</h3>
         </div>
         <div className='btn-container'>
           <button

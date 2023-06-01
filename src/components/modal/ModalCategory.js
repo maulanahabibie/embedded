@@ -15,9 +15,9 @@ const ModalCategory = ({
         <Modal.Header>
             <div className="d-flex justify-content-between align-items-center flex-wrap">
                 <div>
-                    <h3 className="card-label fw-bold">{type} Categories</h3>
+                    <h3 className="card-label fw-bold">{type} Departements</h3>
                     <span className="form-text text-muted">
-                        Form Input Catgeories
+                        Form Input Departements
                     </span>
                 </div>
             </div>
@@ -26,25 +26,17 @@ const ModalCategory = ({
         <div className='form-center'>
           <FormRow
             type='text'
-            labelText='name Catgeory'
-            name='categoryName'
-            value={dataForm.category}
+            labelText='name departement'
+            name='departementName'
+            value={dataForm.departementName}
             handleChange={(e)=>handleChange(e, 'category')}
             disabled={['Delete'].includes(type)}
           />
           <FormRow
             type='text'
-            labelText='Route Category'
-            name='categoryRoute'
-            value={dataForm.categoryRoute}
-            handleChange={(e)=>handleChange(e, 'category')}
-            disabled={['Delete'].includes(type)}
-          />
-          <FormRow
-            type='text'
-            labelText='name user'
-            name='categoryUser'
-            value={dataForm.categoryUser}
+            labelText='Route departement'
+            name='departementRoute'
+            value={dataForm.departementRoute}
             handleChange={(e)=>handleChange(e, 'category')}
             disabled={['Delete'].includes(type)}
           />

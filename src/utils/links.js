@@ -5,9 +5,10 @@ import { ImProfile } from 'react-icons/im';
 
 const links = [
   { id: 1, text: 'stats', path: '/', icon: <IoBarChartSharp /> },
-  { id: 2, text: 'category', path: 'category', icon: <MdQueryStats /> },
-  { id: 3, text: 'profile', path: 'profile', icon: <ImProfile /> },
-  { id: 4, text: 'admin', path: 'admin', icon: <FaWpforms /> },
+  { id: 2, text: 'alldata', path: 'alldata', icon: <IoBarChartSharp /> },
+  { id: 3, text: 'departement', path: 'departement', icon: <MdQueryStats /> },
+  { id: 4, text: 'profile', path: 'profile', icon: <ImProfile /> },
+  { id: 5, text: 'admin', path: 'admin', icon: <FaWpforms /> },
   // { id: 3, text: 'all jobs', path: 'all-jobs', icon: <MdQueryStats /> },
   // { id: 4, text: 'add job', path: 'add-job', icon: <FaWpforms /> },
 ];
