@@ -16,7 +16,17 @@ export const loginUserThunk = async (url, user, thunkAPI) => {
     const resp = await customFetch.post(url, user);
     return resp.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data.msg);
+    return thunkAPI.rejectWithValue(error.response.data.error.message || error.response.data.error.msg || "Failed Login");
+  }
+};
+
+export const loginUserCheckThunk = async (url, thunkAPI) => {
+  try {
+    const resp = await customFetch.get(url);
+    const data = await customFetch.get(`/users/${resp.data.id}?populate=*`);
+    return {user: resp.data, userData: data.data};
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.error.message || error.response.data.error.msg || "Failed Login");
   }
 };
 

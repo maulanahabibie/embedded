@@ -1,15 +1,16 @@
 import axios from 'axios';
+import { API_HIT } from '../config/api';
 import { clearStore } from '../features/user/userSlice';
 import { getUserFromLocalStorage } from './localStorage';
 
 const customFetch = axios.create({
-  baseURL: 'https://jobify-prod.herokuapp.com/api/v1/toolkit',
+  baseURL: `${API_HIT}`,
 });
 
 customFetch.interceptors.request.use((config) => {
-  const user = getUserFromLocalStorage();
-  if (user) {
-    config.headers['Authorization'] = `Bearer ${user.token}`;
+  const token = getUserFromLocalStorage();
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
   }
   return config;
 });

@@ -8,6 +8,9 @@ import {FaEraser} from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom';
 import { ModalCategory } from '../../components';
 import { formatDate, MySwal } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { createDepartement, deleteDepartement, updateDepartement } from '../../utils/moxAxios';
+import { loginUserCheck } from '../../features/user/userSlice';
 
 const initialModal = {
     show: false,
@@ -15,10 +18,10 @@ const initialModal = {
     onSubmit:()=>{}
 }
 const initialDataForm = {
-    departementName: "",
-    departementRoute: "",
-    departementPublish: "",
+    name: "",
+    url: "",
     slug: "",
+    id: "",
 }
 
 const dataCategories = [
@@ -28,14 +31,22 @@ const dataCategories = [
 ]
 const sw = new MySwal()
 const Category = () => {
+    const {isLoading, userData}=useSelector((state)=>state.user)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    const[datas,setDatas]=useState([...dataCategories])
-    const[datasReal,setDatasReal]=useState([...dataCategories])
+    const[datas,setDatas]=useState([])
+    const[datasReal,setDatasReal]=useState([])
     const[search,setSearch]=useState('')
-    const[isloading, setIsLoading]=useState(false)
     const[modal,setModal]=useState({...initialModal})
     const[dataForm, setDataForm]=useState({...initialDataForm})
+
+    useEffect(()=>{
+        if(userData.departementId){
+            setDatas(userData.departementId)
+            setDatasReal(userData.departementId)
+          }
+    },[userData.departementId])
 
     const handleChange = useCallback((e, type='')=>{
         const{name, value}=e.target;
@@ -43,67 +54,85 @@ const Category = () => {
             if(name==='search') setSearch(value)
         }
         else if(type==='category'){
-            if(name==='departementName'){
-                let val = value.split('');
-                val = val.map(f=>['',' '].includes(f) ? '-': f ).join('')            
-                setDataForm((old)=>({
-                    ...old,
-                    [name]: value,
-                    departementRoute: `/departement/${val}`.toLowerCase()
-                }))
-            }
+            let val = value.split('');
+            val = val.map(f=>['',' '].includes(f) ? '-': f ).join('')            
+            setDataForm((old)=>({
+                ...old,
+                [name]: value,
+                url: `/${val}`.toLowerCase()
+            }))
         }
     },[])
     const handleSubmit = useCallback(()=>{
         sw.loading()
-        setIsLoading(true)
         if(search !== ''){
             const newState = datasReal.filter(f=>{
-                return `${f.departementName}`.toLowerCase().includes(search.toLowerCase())
+                return `${f.name}`.toLowerCase().includes(search.toLowerCase())
             })
             setDatas(newState)
             
         }else{
             setDatas(datasReal)
         }
-        setTimeout(()=>sw.close(), 2000)
-        setTimeout(()=>setIsLoading(false), 2000)
+        setTimeout(()=>sw.close(), 500)
     },[search, datasReal])
 
     const onLinkButton = useCallback((param)=>{
         navigate(param)
     },[])
-    const onSubmitModal = useCallback((param='')=>{
+    const onSubmitModal = useCallback(async(param='')=>{
         sw.loading()
-        setIsLoading(true)
         const newState = {...dataForm}
         if(param==='Create'){
+            const generateId = `DEPA${formatDate(new Date(), 'time')}`
             const payload = {
                 ...newState,
-                slug: `CATE${formatDate(new Date(), 'time')}`
+                slug: generateId,
+                url: `/departement/${generateId}${newState.url}`,
+                userId: [userData.id],
+                id  : null
             }
-            setModal({...initialModal})
-            setDataForm({...initialDataForm})
-            const newArr = [...datasReal].concat([payload])
-            setDatasReal(newArr)
-            setDatas(newArr)
+            const res = await createDepartement(payload)
+            if(res.code !== '1') return sw.warning(res.msg || "Failed");
+            else{
+                sw.success(res.msg || "Created")
+                setModal({...initialModal})
+                setDataForm({...initialDataForm})
+                dispatch(loginUserCheck());
+            }
         }
         else if(param==='Edit'){
-            setModal({...initialModal})
-            setDataForm({...initialDataForm})
+            const payload = {
+                id  : newState.id,
+                name: newState.name,
+                url : newState.url,
+            }
+            const res = await updateDepartement(payload);
+            if(res.code !== '1') return sw.warning(res.msg || "Failed");
+            else{
+                sw.success(res.msg+" "+res.name || "Update")
+                setModal({...initialModal})
+                setDataForm({...initialDataForm})
+                dispatch(loginUserCheck());
+            }
         }
         else if(param==='Delete'){
-            setModal({...initialModal})
-            setDataForm({...initialDataForm})
-
+            const payload = {
+                id: newState.id
+            }
+            const res = await deleteDepartement(payload);
+            if(res.code !== '1') return sw.warning(res.msg || "Failed");
+            else{
+                sw.success(res.msg || "Created")
+                setModal({...initialModal})
+                setDataForm({...initialDataForm})
+                dispatch(loginUserCheck());
+            }
         }
-        setTimeout(()=>sw.close(), 2000)
-        setTimeout(()=>setIsLoading(false), 2000)
+        setTimeout(()=>sw.close(), 1500)
     },[dataForm])
     const onShowModal =useCallback((param='', slug='')=>{
         if(param==='close'){
-            sw.loading()
-            setIsLoading(true)
             setDataForm({...initialDataForm})
             setModal({...initialModal})
 
@@ -117,12 +146,12 @@ const Category = () => {
             }))
         }
         else if(param==='edit'){
-            const find = datasReal.find(f=>f.slug===slug)
+            const find = datasReal.find(f=>f.id===slug)
             setDataForm((old)=>({
                 ...old,
-                departementName  : find.departementName || "",
-                departementRoute : find.departementRoute || "",
-                departementPublish  : find.departementPublish || "",
+                name  : find.name || "",
+                url   : find.url || "",
+                id    : find.id || "",
             }))
             setModal((old)=>({
                 ...old,
@@ -132,12 +161,12 @@ const Category = () => {
             }))
         }
         else if(param==='delete'){
-            const find = datasReal.find(f=>f.slug===slug)
+            const find = datasReal.find(f=>f.id===slug)
             setDataForm((old)=>({
                 ...old,
-                departementName  : find.departementName || "",
-                departementRoute : find.departementRoute || "",
-                departementPublish  : find.departementPublish || "",
+                name  : find.name || "",
+                url   : find.url  || "",
+                id    : find.id   || "",
             }))
             setModal((old)=>({
                 ...old,
@@ -146,8 +175,6 @@ const Category = () => {
                 onSubmit: ()=>onSubmitModal('delete', slug)
             }))
         }
-        setTimeout(()=>sw.close(), 2000)
-        setTimeout(()=>setIsLoading(false), 2000)
     },[onSubmitModal, datasReal])
     if(modal.show){
         return(
@@ -163,6 +190,7 @@ const Category = () => {
             </Wrapper>
         )
     }
+
   return (
     <Wrapper className='p-4'>
         <div className="d-flex justify-content-between align-items-center flex-wrap mb-md-5">
@@ -208,19 +236,19 @@ const Category = () => {
                         <td width="10%" className='p-3'>Action</td>
                     </tr>
                 </thead>
-                {!isloading ? datas.length
+                {!isLoading ? datas.length
                 ?
                 datas.map((d,i)=>{
                     return(
                         <tbody key={i}>
                             <tr>
                                 <td width="5%"  className='p-3'>{i+1}</td>
-                                <td width="20%" className='p-3'>{d.departementName}</td>
-                                <td width="20%" className='p-3'>{d.departementPublish}</td>
+                                <td width="20%" className='p-3'>{d.name}</td>
+                                <td width="20%" className='p-3'>{formatDate(d.updatedAt, 'DD-MM-YYYY')}</td>
                                 <td width="10%" className='p-3'>
-                                    <div className='btn btn-outline-success me-2'><FiExternalLink onClick={()=>onLinkButton(d.departementRoute)}          /></div>
-                                    <div className='btn btn-outline-primary me-2'><GrEdit onClick={()=>onShowModal('edit', d.slug)}                    /></div>
-                                    <div className='btn btn-outline-danger'><FaEraser onClick={()=>onShowModal('delete', d.slug)}                      /></div>
+                                    <div className='btn btn-outline-success me-2'><FiExternalLink onClick={()=>onLinkButton(d.url)}    /></div>
+                                    <div className='btn btn-outline-primary me-2'><GrEdit onClick={()=>onShowModal('edit', d.id)}    /></div>
+                                    <div className='btn btn-outline-danger'><FaEraser onClick={()=>onShowModal('delete', d.id)}      /></div>
                                 </td>
                             </tr>
                         </tbody>

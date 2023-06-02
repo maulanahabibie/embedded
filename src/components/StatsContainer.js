@@ -1,40 +1,31 @@
 import StatItem from './StatItem';
-import { FaSuitcaseRolling, FaCalendarCheck, FaBug } from 'react-icons/fa';
+import { FaCalendarCheck } from 'react-icons/fa';
 import Wrapper from '../assets/wrappers/StatsContainer';
 import { useSelector } from 'react-redux';
+import { MySwal } from '../utils';
 
+const sw = new MySwal()
 const StatsContainer = () => {
-  const { stats } = useSelector((store) => store.allJobs);
-
-  const defaultStats = [
-    {
-      title: 'pending applications',
-      count: stats.pending || 0,
-      icon: <FaSuitcaseRolling />,
-      color: '#e9b949',
-      bcg: '#fcefc7',
-    },
-    {
-      title: 'interviews scheduled',
-      count: stats.interview || 0,
+  const { isLoading, userData } = useSelector((store) => store.user);
+  const departementId = !isLoading && userData.departementId && userData.departementId.map((d)=>{
+    const countEmbed = userData.embeddedId.filter(f=>f.slugDepartement===d.slug);
+    return{
+      title: d.name,
+      count: countEmbed.length || 0,
       icon: <FaCalendarCheck />,
       color: '#647acb',
       bcg: '#e0e8f9',
-    },
-    {
-      title: 'jobs declined',
-      count: stats.declined || 0,
-      icon: <FaBug />,
-      color: '#d66a6a',
-      bcg: '#ffeeee',
-    },
-  ];
-
+    }
+  })
   return (
     <Wrapper>
-      {defaultStats.map((item, index) => {
-        return <StatItem key={index} {...item} />;
-      })}
+      {!isLoading && departementId
+        ? 
+          departementId.map((item, index) => {
+            return <StatItem key={index} {...item} />
+          })
+        : <div>Loading ...</div>
+      }
     </Wrapper>
   );
 };

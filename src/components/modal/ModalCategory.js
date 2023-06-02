@@ -27,16 +27,16 @@ const ModalCategory = ({
           <FormRow
             type='text'
             labelText='name departement'
-            name='departementName'
-            value={dataForm.departementName}
+            name='name'
+            value={dataForm.name}
             handleChange={(e)=>handleChange(e, 'category')}
             disabled={['Delete'].includes(type)}
           />
           <FormRow
             type='text'
             labelText='Route departement'
-            name='departementRoute'
-            value={dataForm.departementRoute}
+            name='url'
+            value={dataForm.url}
             handleChange={(e)=>handleChange(e, 'category')}
             disabled={true}
           />

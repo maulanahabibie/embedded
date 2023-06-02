@@ -10,12 +10,13 @@ const initialState = {
   name: '',
   email: '',
   password: '',
+  identifier:'',
   isMember: true,
 };
 
 function Register() {
   const [values, setValues] = useState(initialState);
-  const { user, isLoading } = useSelector((store) => store.user);
+  const { user, isLoading, token } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,7 +24,11 @@ function Register() {
     const name = e.target.name;
     const value = e.target.value;
 
-    setValues({ ...values, [name]: value });
+    setValues({ 
+      ...values, 
+      [name]: value, 
+      identifier: [name]==='name'?value:'' || [name]==='email'?value:''
+    });
   };
   const onSubmit = (e) => {
     e.preventDefault();
@@ -33,7 +38,7 @@ function Register() {
       return;
     }
     if (isMember) {
-      dispatch(loginUser({ email: email, password: password }));
+      dispatch(loginUser({ email: email, identifier: email || name, password: password }));
       return;
     }
     dispatch(registerUser({ name, email, password }));
@@ -43,12 +48,12 @@ function Register() {
     setValues({ ...values, isMember: !values.isMember });
   };
   useEffect(() => {
-    if (user) {
+    if (token) {
       setTimeout(() => {
         navigate('/');
       }, 2000);
     }
-  }, [user]);
+  }, [token]);
   return (
     <Wrapper className='full-page'>
       <form className='form' onSubmit={onSubmit}>

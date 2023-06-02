@@ -17,7 +17,7 @@ const Navbar = () => {
   return (
     <Wrapper>
       <div className='nav-center'>
-        <button type='button' className='toggle-btn' onClick={toggle}>
+        <button type='button' className='toggle-btn btn text-danger' onClick={toggle}>
           <FaAlignLeft />
         </button>
         <div>
@@ -27,17 +27,17 @@ const Navbar = () => {
         <div className='btn-container'>
           <button
             type='button'
-            className='btn'
+            className='btn btn-danger'
             onClick={() => setShowLogout(!showLogout)}
           >
-            <FaUserCircle />
-            {user?.name}
+            <FaUserCircle  className=''/>
+              <div className='m-0 p-0'>{user?.name}</div>
             <FaCaretDown />
           </button>
           <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>
             <button
               type='button'
-              className='dropdown-btn'
+              className='dropdown-btn btn-danger'
               onClick={() => dispatch(clearStore('Logging out...'))}
             >
               logout

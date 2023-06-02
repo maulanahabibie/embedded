@@ -7,7 +7,8 @@ const ModalEmbedded = ({
     setShow=()=>{},
     onChange=()=>{},
     onSubmit=()=>{},
-    data={}
+    data={},
+    departementName=[]
 }) => {
   return (
     <Modal show={show} size='xl'>
@@ -24,32 +25,41 @@ const ModalEmbedded = ({
         <Modal.Body>
             <div>
                 <div className='mb-3'>
-                    <label htmlFor='embeddedName' className='form-label'>Embedded Name</label>
-                    <input type='text' className='form-control' id='embeddedName' name='embeddedName' value={data.embeddedName} onChange={(e)=>onChange(e, 'embedded')} />
+                    <label htmlFor='name' className='form-label'>Embedded Name</label>
+                    <input type='text' className='form-control' id='name' name='name' value={data.name} onChange={(e)=>onChange(e, 'embedded')} />
                 </div>
+                {/* <div className='mb-3'>
+                    <label htmlFor='slugDepartement' className='form-label'>Embedded Name</label>
+                    <input type='text' className='form-control' id='slugDepartement' name='slugDepartement' value={data.slugDepartement} onChange={(e)=>onChange(e, 'embedded')} disabled={true}/>
+                </div> */}
                 <div className='mb-4'>
-                    <label htmlFor='embeddedDepartement' className='form-label'>Departement</label>
-                    <select class="form-select" aria-label="Default select example" id='embeddedDepartement' value={data.embeddedDepartement} name='embeddedDepartement' onChange={(e)=>onChange(e, 'embedded')}>
-                        <option selected></option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option> onChange
-                        <option value="3">Three</option>
+                    <label htmlFor='slugDepartement' className='form-label'>Departement</label>
+                    <select className="form-select" aria-label="Default select example" id='slugDepartement' value={data.slugDepartement} name='slugDepartement' onChange={(e)=>onChange(e, 'embedded')} disabled={true}>
+                        {departementName.map((d,i)=>{
+                            return(
+                                <option key={i} value={d.value}>{d.title}</option>
+                            )
+                        })}
                     </select>
                 </div>
                 <div className='mb-3'>
-                    <label htmlFor='embeddedDescription' className='form-label'>Description</label>
-                    <textarea id='embeddedDescription' className='form-control' placeholder='Example : This Embedded About Marketing ...' value={data.embeddedDescription} name='embeddedDescription' onChange={(e)=>onChange(e, 'embedded')}></textarea>
+                    <label htmlFor='description' className='form-label'>Description</label>
+                    <textarea id='description' className='form-control' placeholder='Example : This Embedded About Marketing ...' value={data.description} name='description' onChange={(e)=>onChange(e, 'embedded')}></textarea>
                 </div>
                 <div className='mb-3'>
-                    <label htmlFor='embeddedUrl' className='form-label'>URL</label>
-                    <textarea id='embeddedUrl' className='form-control' placeholder='Example : https://app.powerbi.com/view?r=eyJrIjoiNTY1MzI2OTA' value={data.embeddedUrl} name='embeddedUrl' onChange={(e)=>onChange(e, 'embedded')}></textarea>
+                    <label htmlFor='image' className='form-label'>Image Url</label>
+                    <textarea id='image' className='form-control' placeholder='Example : https://app.powerbi.com/view?r=eyJrIjoiNTY1MzI2OTA' value={data.image} name='image' onChange={(e)=>onChange(e, 'embedded')}></textarea>
+                </div>
+                <div className='mb-3'>
+                    <label htmlFor='source' className='form-label'>Source Url</label>
+                    <textarea id='source' className='form-control' placeholder='Example : https://app.powerbi.com/view?r=eyJrIjoiNTY1MzI2OTA' value={data.source} name='source' onChange={(e)=>onChange(e, 'embedded')}></textarea>
                 </div>
             </div>
         </Modal.Body>
         <Modal.Footer>
             <div className='text-end'>
                 <Button className='btn btn-secondary me-3' onClick={()=>setShow('close')}>Close</Button>
-                <Button className='btn btn-primary' onClick={()=>onSubmit(type)}>Save</Button>
+                <Button className={`btn ${type==='Delete' && 'btn-danger'} ${type==='Update' && 'btn-primary'} ${type==='Create' && 'btn-success'}`} onClick={()=>onSubmit(type)}>{type}</Button>
             </div>
         </Modal.Footer>
     </Modal>

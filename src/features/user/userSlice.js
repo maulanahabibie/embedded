@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { CONDITIONAL } from '../../config/api';
 import {
   addUserToLocalStorage,
   getUserFromLocalStorage,
@@ -10,25 +11,38 @@ import {
   registerUserThunk,
   updateUserThunk,
   clearStoreThunk,
+  loginUserCheckThunk,
 } from './userThunk';
 
 const initialState = {
   isLoading: false,
   isSidebarOpen: false,
-  user: getUserFromLocalStorage(),
+  token: getUserFromLocalStorage() || null,
+  user: [],
+  userData: []
 };
 
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async (user, thunkAPI) => {
-    return registerUserThunk('/auth/register', user, thunkAPI);
+    if(CONDITIONAL) return registerUserThunk('/auth/local/register', user, thunkAPI);
+    else return registerUserThunk('/auth/register', user, thunkAPI);
+  
   }
 );
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (user, thunkAPI) => {
-    return loginUserThunk('/auth/login', user, thunkAPI);
+    if(CONDITIONAL) return loginUserThunk('/auth/local', user, thunkAPI);
+    else return loginUserThunk('/auth/login', user, thunkAPI);
+  }
+);
+
+export const loginUserCheck = createAsyncThunk(
+  'user/getUserLogin',
+  async (user, thunkAPI) => {
+    return loginUserCheckThunk('/users/me', user, thunkAPI);
   }
 );
 
@@ -47,7 +61,9 @@ const userSlice = createSlice({
       state.isSidebarOpen = !state.isSidebarOpen;
     },
     logoutUser: (state, { payload }) => {
+      state.token = null
       state.user = null;
+      state.userData = null;
       state.isSidebarOpen = false;
       removeUserFromLocalStorage();
       if (payload) {
@@ -63,7 +79,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         const { user } = payload;
         state.isLoading = false;
-        state.user = user;
+        // state.user = user;
         addUserToLocalStorage(user);
         toast.success(`Hello There ${user.name}`);
       })
@@ -75,14 +91,28 @@ const userSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
-        const { user } = payload;
+        const { user, jwt='' } = payload;
         state.isLoading = false;
         state.user = user;
-        addUserToLocalStorage(user);
+        state.token = jwt;
+        addUserToLocalStorage(jwt);
 
-        toast.success(`Welcome Back ${user.name}`);
+        toast.success(`Welcome Back ${user.username}`);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(loginUserCheck.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginUserCheck.fulfilled, (state, { payload }) => {
+        const {user, userData}=payload
+        state.isLoading = false;
+        // state.user = user;
+        state.userData = userData;
+      })
+      .addCase(loginUserCheck.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       })
