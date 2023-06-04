@@ -4,6 +4,7 @@ import { CONDITIONAL } from '../../config/api';
 import {
   addUserToLocalStorage,
   getUserFromLocalStorage,
+  getUserRole,
   removeUserFromLocalStorage,
 } from '../../utils/localStorage';
 import {
@@ -18,8 +19,10 @@ const initialState = {
   isLoading: false,
   isSidebarOpen: false,
   token: getUserFromLocalStorage() || null,
+  role: getUserRole()|| null,
   user: [],
-  userData: []
+  userData: [],
+  userList: []
 };
 
 export const registerUser = createAsyncThunk(
@@ -64,6 +67,7 @@ const userSlice = createSlice({
       state.token = null
       state.user = null;
       state.userData = null;
+      state.role = null;
       state.isSidebarOpen = false;
       removeUserFromLocalStorage();
       if (payload) {
@@ -93,9 +97,9 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         const { user, jwt='' } = payload;
         state.isLoading = false;
-        state.user = user;
+        // state.user = user;
         state.token = jwt;
-        addUserToLocalStorage(jwt);
+        addUserToLocalStorage(jwt, user.code);
 
         toast.success(`Welcome Back ${user.username}`);
       })
@@ -107,10 +111,12 @@ const userSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(loginUserCheck.fulfilled, (state, { payload }) => {
-        const {user, userData}=payload
+        const {user, userData, userList}=payload
         state.isLoading = false;
-        // state.user = user;
+        state.user = user;
+        state.role = user.code;
         state.userData = userData;
+        state.userList = userList;
       })
       .addCase(loginUserCheck.rejected, (state, { payload }) => {
         state.isLoading = false;

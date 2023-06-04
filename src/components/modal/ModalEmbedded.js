@@ -1,5 +1,6 @@
 import React from 'react'
 import {Button, Modal} from 'react-bootstrap'
+import { FaElementor, FaHubspot } from 'react-icons/fa'
 
 const ModalEmbedded = ({
     type='',
@@ -14,12 +15,20 @@ const ModalEmbedded = ({
     <Modal show={show} size='xl'>
         <Modal.Header>
             <div className="d-flex justify-content-between align-items-center flex-wrap">
-                <div>
+                <button type='button' className='toggle-btn btn text-danger' >
+                    <div className=''>
+                        <h3 className='logo-text fw-bold'>{type} Embedded <FaHubspot /></h3>
+                        <span className="form-text text-muted">
+                            Form Input Embedded
+                        </span>
+                    </div>                  
+                </button>
+                {/* <div>
                     <h3 className="card-label fw-bold">{type} Embedded</h3>
                     <span className="form-text text-muted">
                         Form Input Embedded
                     </span>
-                </div>
+                </div> */}
             </div>
         </Modal.Header>
         <Modal.Body>

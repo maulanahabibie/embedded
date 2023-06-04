@@ -19,7 +19,8 @@ const dataDummy = [
   {embeddedName: 'Penjualan Opor',  embeddedDescription: 'Penjualan Opor tahun 2020', image: 'https://reactjs.org/logo-og.png', source: 'https://app.powerbi.com/view?r=eyJrIjoiNTY1MzI2OTAtYzgzOS00NTMxLWI2ZmEtYjNmYmQ4Nzg3MWMwIiwidCI6ImZjNzQzMDc1LTkzZWQtNGE1Yy04MmMwLWNhNWVhYzkxNDIyMCIsImMiOjEwfQ%3D%3D'},
 ]
 const AllData = () => {
-  const {userData}= useSelector((store) => store.user);
+  const {user, userData}= useSelector((store) => store.user);
+
   const[isLoading, setIsLoading]=useState(false)
   const[datas, setDatas]=useState([])
   const[datasReal, setDatasReal]=useState([])
@@ -56,6 +57,7 @@ const AllData = () => {
       setDatasReal(userData.embeddedId)
     }
   },[userData.embeddedId])
+  
   return (
    <Wrapper>
       <div>
@@ -82,14 +84,14 @@ const AllData = () => {
               ? 
                 datas.map((d,i)=>{
                   return(
-                    <Col md={6} className='mb-3 box-sizing' key={i}>
+                    <Col md={4} className='mb-3 box-sizing' key={i}>
                       <div className='bg-danger p-2 rounded w-100' style={{height: '400px'}}>
                         <div className='row w-100'>
                           <h3 className='col-9 m-0 text-truncate text-white fw-bold'>{d.name}</h3>
                           <div className='col-3 text-end p-0'>
                             <Button className='me-1 btn btn-light' onClick={()=>onLink(d.source)}><FiExternalLink className='text-danger' /></Button>
-                            <Button className='me-1 btn btn-light' onClick={()=>onLink(d.source)}><GrEdit className='text-danger' /></Button>
-                            <Button className='btn btn-light' onClick={()=>onLink(d.source)}><FaEraser className='text-danger' /></Button>
+                            {/* <Button className='me-1 btn btn-light' onClick={()=>onLink(d.source)}><GrEdit className='text-danger' /></Button>
+                            <Button className='btn btn-light' onClick={()=>onLink(d.source)}><FaEraser className='text-danger' /></Button> */}
                           </div>
                         </div>
                         <div className='row w-100 justify-item-center box-sizing align-items-center m-0 p-0' style={{height: '60px', whiteSpace: 'pre-line', lineHeight: '15px', overflow: 'hidden', textAlign: 'justify'}}>

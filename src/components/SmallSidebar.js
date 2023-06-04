@@ -18,7 +18,7 @@ const SmallSidebar = () => {
           isSidebarOpen ? 'sidebar-container show-sidebar' : 'sidebar-container'
         }
       >
-        <div className='content'>
+        <div className='content bg-danger'>
           <button className='close-btn' onClick={toggle}>
             <FaTimes />
           </button>

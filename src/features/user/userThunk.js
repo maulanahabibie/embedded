@@ -1,3 +1,4 @@
+import { roleCms } from '../../config/role';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { clearAllJobsState } from '../allJobs/allJobsSlice';
 import { clearValues } from '../job/jobSlice';
@@ -22,9 +23,46 @@ export const loginUserThunk = async (url, user, thunkAPI) => {
 
 export const loginUserCheckThunk = async (url, thunkAPI) => {
   try {
-    const resp = await customFetch.get(url);
-    const data = await customFetch.get(`/users/${resp.data.id}?populate=*`);
-    return {user: resp.data, userData: data.data};
+    var init={user: null, userList: null}
+
+    var resp = await customFetch.get(url);
+    var specifikasi = roleCms(resp.data.code)
+    if(!specifikasi.show) init.user = await customFetch.get(`/users/${resp.data.id}?populate=*`);
+    else {
+      const listUsers = await customFetch.get(`/users`);
+      const listDepartements = await customFetch.get(`/departements`)
+      const listEmbeddeds = await customFetch.get(`/embeddeds`)
+
+      init.user = {
+        data : {
+          ...resp.data,
+          departementId : listDepartements.data.data.length && listDepartements.data.data.map(d=>({
+            id: d.id,
+            createdAt   : d.attributes.createdAt || "",
+            name        : d.attributes.name || "",
+            publishedAt : d.attributes.publishedAt || "",
+            slug        : d.attributes.slug || "",
+            updatedAt   : d.attributes.updatedAt || "",
+            url         : d.attributes.url || "",
+          })) || [],
+          embeddedId    : listEmbeddeds.data.data.length && listEmbeddeds.data.data.map(d=>({
+            id : d.id,
+            createdAt       : d.attributes.createdAt || "",
+            description     : d.attributes.description || "",
+            image           : d.attributes.image || "",
+            name            : d.attributes.name || "", 
+            publishedAt     : d.attributes.publishedAt || "",
+            slug            : d.attributes.slug || "",
+            slugDepartement : d.attributes.slugDepartement || "",
+            source          : d.attributes.source || "",
+            updatedAt       : d.attributes.updatedAt || "",
+          })) || []
+        }
+      }
+
+      init.userList = listUsers.data || [];
+    }
+    return {user: resp.data, userData: init.user.data, userList: init.userList};
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.error.message || error.response.data.error.msg || "Failed Login");
   }

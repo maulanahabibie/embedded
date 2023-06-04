@@ -18,11 +18,12 @@ const Navbar = () => {
     <Wrapper>
       <div className='nav-center'>
         <button type='button' className='toggle-btn btn text-danger' onClick={toggle}>
+          <div><h3 className='logo-text fw-bold'>CMS Portal</h3></div>
           <FaAlignLeft />
         </button>
         <div>
-          <Logo />
-          <h3 className='logo-text fw-bold'>CMS Portal</h3>
+          {/* <Logo /> */}
+          {/* <h3 className='logo-text fw-bold'>CMS Portal</h3> */}
         </div>
         <div className='btn-container'>
           <button

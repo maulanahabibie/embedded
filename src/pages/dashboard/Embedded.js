@@ -4,13 +4,14 @@ import {Button, Col, Row,} from 'react-bootstrap'
 import Wrapper from '../../assets/wrappers/DashboardFormPage'
 import {FiExternalLink} from 'react-icons/fi'
 import {GrEdit} from 'react-icons/gr'
-import {FaEraser} from 'react-icons/fa'
+import {FaElementor, FaEraser, FaHubspot} from 'react-icons/fa'
 import { Search } from '../../components'
 import { formatDate, MySwal } from '../../utils'
 import { ModalEmbedded } from '../../components/modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { createEmbedded, deleteEmbedded, updateEmbedded } from '../../utils/moxAxios'
 import { loginUserCheck } from '../../features/user/userSlice'
+import { generateIds, roleCms } from '../../config/role'
 
 const dataEmbedded =[
     {nameEmbedded : 'Penjualan Kartu Simpati', category: 'TABLEAU', userName: 'comang', embedded: "https://app.powerbi.com/view?r=eyJrIjoiMjZmZDQyZTgtNzcxNS00M2RkLWIxY2YtNTc3Mjk1ZDA5NzZmIiwidCI6ImZjNzQzMDc1LTkzZWQtNGE1Yy04MmMwLWNhNWVhYzkxNDIyMCIsImMiOjEwfQ%3D%3D", publish: "13-04-1995"},
@@ -39,11 +40,12 @@ const initialModal = {
 }
 const sw = new MySwal();
 const Embedded = () => {
-    const {isLoading, userData}=useSelector((state)=>state.user)
+    const {isLoading, userData, role}=useSelector((state)=>state.user)
     const {slug, viewType} = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    const[roles]=useState(roleCms(role))
     const[departementName, setDepartementName]=useState([])
 
     const[datas, setDatas]=useState([])
@@ -90,7 +92,7 @@ const Embedded = () => {
     const onSubmitData = useCallback(async(param='')=>{
         sw.loading()
         const newState = {...dataForm}
-        const generateSlug = `${formatDate(new Date(), 'time')}`
+        const generateSlug = generateIds('EMBEDDED');
         if(param==='Create'){
             const payload = {
                 ...newState,
@@ -139,7 +141,7 @@ const Embedded = () => {
             }
         }
         setTimeout(()=> sw.close(), 1500)
-    },[dataForm])
+    },[dataForm, generateIds])
 
     const buttonLink = useCallback((url)=>{
         window.open(url, '_blank').focus();
@@ -218,14 +220,22 @@ const Embedded = () => {
   return (
     <Wrapper>
         <div className="d-flex justify-content-between align-items-center flex-wrap mb-md-3">
-            <div>
+            <button type='button' className='toggle-btn btn text-danger' >
+                <div className=''>
+                    <h3 className='logo-text fw-bold'>{viewType} <FaHubspot /></h3>
+                    <span className="form-text text-muted">
+                        Data List {viewType}
+                    </span>
+                </div>                  
+            </button>
+            {/* <div>
                 <h3 className="card-label fw-bold">{viewType}</h3>
                 <span className="form-text text-muted">
                     Data List {viewType}
                 </span>
-            </div>
+            </div> */}
             <div>
-                <Button className="btn btn-danger font-weight-bold" onClick={()=>onModalShow('create')}>
+                <Button className={`btn btn-danger font-weight-bold ${roles.crud?'':'d-none'}`} onClick={()=>onModalShow('create')}>
                     Create New
                 </Button>
             </div>
@@ -258,8 +268,8 @@ const Embedded = () => {
                                 <h3 className='col-9 m-0 text-truncate text-white fw-bold'>{d.name}</h3>
                                 <div className='col-3 text-end p-0'>
                                     <Button className='me-1 btn btn-light' onClick={()=>buttonLink(d.source)}><FiExternalLink className='text-danger' /></Button>
-                                    <Button className='me-1 btn btn-light' onClick={()=>onModalShow('edit',d.id)}><GrEdit className='text-danger' /></Button>
-                                    <Button className='btn btn-light' onClick={()=>onModalShow('delete',d.id)}><FaEraser className='text-danger' /></Button>
+                                    <Button className={`me-1 btn btn-light ${roles.crud?'':'d-none'}`} onClick={()=>onModalShow('edit',d.id)}><GrEdit className='text-danger' /></Button>
+                                    <Button className={`btn btn-light      ${roles.crud?'':'d-none'}`} onClick={()=>onModalShow('delete',d.id)}><FaEraser className='text-danger' /></Button>
                                 </div>
                               </div>
                               <div className='row w-100 justify-item-center box-sizing align-items-center m-0 p-0' style={{height: '60px', whiteSpace: 'pre-line', lineHeight: '15px', overflow: 'hidden', textAlign: 'justify'}}>

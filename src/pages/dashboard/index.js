@@ -5,5 +5,6 @@ import Category from './Category';
 import Embedded from './Embedded';
 import Admin from './admin';
 import Trigger from './Trigger';
+import Create from './admin/Create';
 
-export { Profile, Stats, SharedLayout, Category, Embedded, Admin, Trigger };
+export { Profile, Stats, SharedLayout, Category, Embedded, Admin, Trigger, Create };

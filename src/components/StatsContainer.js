@@ -13,8 +13,8 @@ const StatsContainer = () => {
       title: d.name,
       count: countEmbed.length || 0,
       icon: <FaCalendarCheck />,
-      color: '#647acb',
-      bcg: '#e0e8f9',
+      color: '#DC143C',
+      bcg: '#C0C0C0',
     }
   })
   return (

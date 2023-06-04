@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Landing, Error, Register, ProtectedRoute, AllData } from './pages';
 import { ToastContainer } from 'react-toastify';
@@ -11,8 +11,10 @@ import {
   Embedded,
   Admin,
   Trigger,
+  Create,
 } from './pages/dashboard';
 import { Suspense } from 'react';
+import ProtectedAdmin from './pages/ProtectedAdmin';
 function App() {
   return (
     <Suspense fallback={<Trigger />}>
@@ -32,7 +34,16 @@ function App() {
             <Route path='alldata' element={<AllData />} />
             <Route path='departement' element={<Category />} />
             <Route path='departement/:slug/:viewType' element={<Embedded />} />
-            <Route path='admin' element={<Admin />} />
+            <Route path='admin' element={ 
+              <ProtectedAdmin>
+                 <Admin />
+              </ProtectedAdmin>} 
+            />
+            <Route path='admin/:viewType/:id?' element={ 
+              <ProtectedAdmin>
+                 <Create />
+              </ProtectedAdmin>} 
+            />
           </Route>
           <Route path='landing' element={<Landing />} />
           <Route path='register' element={<Register />} />

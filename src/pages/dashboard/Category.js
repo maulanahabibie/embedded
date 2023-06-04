@@ -4,13 +4,14 @@ import Wrapper from '../../assets/wrappers/DashboardFormPage';
 import Search from '../../components/Search';
 import {FiExternalLink} from 'react-icons/fi'
 import {GrEdit} from 'react-icons/gr'
-import {FaEraser} from 'react-icons/fa'
+import {FaEraser, FaElementor} from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom';
 import { ModalCategory } from '../../components';
 import { formatDate, MySwal } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDepartement, deleteDepartement, updateDepartement } from '../../utils/moxAxios';
 import { loginUserCheck } from '../../features/user/userSlice';
+import { generateIds, roleCms } from '../../config/role';
 
 const initialModal = {
     show: false,
@@ -31,7 +32,7 @@ const dataCategories = [
 ]
 const sw = new MySwal()
 const Category = () => {
-    const {isLoading, userData}=useSelector((state)=>state.user)
+    const {isLoading, userData, role}=useSelector((state)=>state.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -40,6 +41,7 @@ const Category = () => {
     const[search,setSearch]=useState('')
     const[modal,setModal]=useState({...initialModal})
     const[dataForm, setDataForm]=useState({...initialDataForm})
+    const[roles]=useState(roleCms(role))
 
     useEffect(()=>{
         if(userData.departementId){
@@ -84,7 +86,7 @@ const Category = () => {
         sw.loading()
         const newState = {...dataForm}
         if(param==='Create'){
-            const generateId = `DEPA${formatDate(new Date(), 'time')}`
+            const generateId = generateIds('DEPARTEMENT');
             const payload = {
                 ...newState,
                 slug: generateId,
@@ -130,7 +132,7 @@ const Category = () => {
             }
         }
         setTimeout(()=>sw.close(), 1500)
-    },[dataForm])
+    },[dataForm, generateIds])
     const onShowModal =useCallback((param='', slug='')=>{
         if(param==='close'){
             setDataForm({...initialDataForm})
@@ -194,14 +196,22 @@ const Category = () => {
   return (
     <Wrapper className='p-4'>
         <div className="d-flex justify-content-between align-items-center flex-wrap mb-md-5">
-            <div>
+            <button type='button' className='toggle-btn btn text-danger' >
+                <div className=''>
+                    <h3 className='logo-text fw-bold'>Departements <FaElementor /></h3>
+                    <span className="form-text text-muted">
+                    Data List Departements
+                    </span>
+                </div>                  
+            </button>
+            {/* <div>
                 <h3 className="card-label fw-bold">Departements</h3>
                 <span className="form-text text-muted">
                     Data List Departements
                 </span>
-            </div>
+            </div> */}
             <div>
-                <Button onClick={()=>onShowModal('create')} className="btn btn-danger font-weight-bold">
+                <Button onClick={()=>onShowModal('create')} className={`btn btn-danger font-weight-bold ${roles.crud?'':'d-none'}`}>
                     Create New
                 </Button>
             </div>
@@ -247,8 +257,8 @@ const Category = () => {
                                 <td width="20%" className='p-3'>{formatDate(d.updatedAt, 'DD-MM-YYYY')}</td>
                                 <td width="10%" className='p-3'>
                                     <div className='btn btn-outline-success me-2'><FiExternalLink onClick={()=>onLinkButton(d.url)}    /></div>
-                                    <div className='btn btn-outline-primary me-2'><GrEdit onClick={()=>onShowModal('edit', d.id)}    /></div>
-                                    <div className='btn btn-outline-danger'><FaEraser onClick={()=>onShowModal('delete', d.id)}      /></div>
+                                    <div className={`btn btn-outline-primary me-2 ${roles.crud ? '' : 'd-none'}`}><GrEdit onClick={()=>onShowModal('edit', d.id)}    /></div>
+                                    <div className={`btn btn-outline-danger       ${roles.crud ? '' : 'd-none'}`}><FaEraser onClick={()=>onShowModal('delete', d.id)}/></div>
                                 </td>
                             </tr>
                         </tbody>
