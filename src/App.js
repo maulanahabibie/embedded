@@ -15,6 +15,7 @@ import {
 } from './pages/dashboard';
 import { Suspense } from 'react';
 import ProtectedAdmin from './pages/ProtectedAdmin';
+import Description from './pages/dashboard/description';
 function App() {
   return (
     <Suspense fallback={<Trigger />}>
@@ -34,6 +35,7 @@ function App() {
             <Route path='alldata' element={<AllData />} />
             <Route path='departement' element={<Category />} />
             <Route path='departement/:slug/:viewType' element={<Embedded />} />
+            <Route path='departement/:slug/:viewType/:id' element={<Description />} />
             <Route path='admin' element={ 
               <ProtectedAdmin>
                  <Admin />

@@ -119,10 +119,12 @@ export const listDepartements = async () => {
         return result
     }
 }
-export const listEmbeddeds = async () => {
+export const listEmbeddeds = async (id='') => {
     var result= {code: "0", msg: "", data: []}
     try {
-        const res = await customFetch.get(`/embeddeds`);
+        var res
+        if(id) res= await customFetch.get(`/embeddeds/${id}`);
+        else res= await customFetch.get(`/embeddeds`);
         if(res.data){
             result.code = '1';
             result.msg  = 'Success';

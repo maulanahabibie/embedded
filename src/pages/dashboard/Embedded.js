@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import {Button, Col, Row,} from 'react-bootstrap'
 import Wrapper from '../../assets/wrappers/DashboardFormPage'
 import {FiExternalLink} from 'react-icons/fi'
@@ -42,6 +42,8 @@ const sw = new MySwal();
 const Embedded = () => {
     const {isLoading, userData, role}=useSelector((state)=>state.user)
     const {slug, viewType} = useParams()
+    const location = useLocation()
+    console.log(location)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -143,8 +145,9 @@ const Embedded = () => {
         setTimeout(()=> sw.close(), 1500)
     },[dataForm, generateIds])
 
-    const buttonLink = useCallback((url)=>{
-        window.open(url, '_blank').focus();
+    const buttonLink = useCallback((url, id='')=>{
+        navigate(`/${url}/${id}`)
+        // window.open(url, '_blank').focus();
     },[])
     const onBack = useCallback(()=>{
         navigate("/departement")
@@ -261,13 +264,14 @@ const Embedded = () => {
                 {!isLoading ? datas.length
                     ?
                     datas.map((d,i)=>{
+                        console.log(d)
                         return(
                             <Col md={6} key={i} className='mb-3 box-sizing' >
                             <div className='bg-danger p-2 rounded w-100' style={{height: '400px'}}>
                               <div className='row w-100'>
                                 <h3 className='col-9 m-0 text-truncate text-white fw-bold'>{d.name}</h3>
                                 <div className='col-3 text-end p-0'>
-                                    <Button className='me-1 btn btn-light' onClick={()=>buttonLink(d.source)}><FiExternalLink className='text-danger' /></Button>
+                                    <Link className='me-1 btn btn-light' to={`${location.pathname}/${d.id}`} ><FiExternalLink className='text-danger' /></Link>
                                     <Button className={`me-1 btn btn-light ${roles.crud?'':'d-none'}`} onClick={()=>onModalShow('edit',d.id)}><GrEdit className='text-danger' /></Button>
                                     <Button className={`btn btn-light      ${roles.crud?'':'d-none'}`} onClick={()=>onModalShow('delete',d.id)}><FaEraser className='text-danger' /></Button>
                                 </div>

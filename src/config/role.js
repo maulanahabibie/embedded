@@ -5,7 +5,7 @@ export const roleCms = (role) => {
     if(['ADMIN'].includes(role)){
         result.show = true;
         result.crud = true;
-    }else if(['ALL USER'].includes(role)){
+    }else if(['SUPER USER'].includes(role)){
         result.show = true;
         result.crud = false;
     }else if(['USER'].includes(role)){

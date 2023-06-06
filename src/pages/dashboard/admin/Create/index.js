@@ -16,7 +16,7 @@ const initialForm = {
   email   : "",
   password: "",
   slug    : "",
-  code    : "",
+  code    : "USER",
   passCode: "",
 }
 
@@ -217,11 +217,16 @@ const Create = () => {
         </div>
         <div className='mb-5'>
           <label className='form-label' htmlFor='code'>Role</label>
-          <input className='form-control' id='code' name='code' value={dataForm.code} onChange={(e)=>handleChange(e)}/>
-          {validation.code &&
+          <select class="form-select" aria-label="Default select example" id='code' name='code' onChange={(e)=>handleChange(e)}>
+            <option value="USER">USER</option>
+            <option value="SUPER USER">SUPER USER</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+          {/* <input className='form-control' id='code' name='code' value={dataForm.code} onChange={(e)=>handleChange(e)}/> */}
+          {/* {validation.code &&
           <div className='text-end'>
             <label className='text-danger m-0' htmlFor='code'>{validation.code}</label>
-          </div>}
+          </div>} */}
         </div>
         <label className='form-label' htmlFor='embedded'>Get Embedded</label>
         <div className='card flex justify-content-center mb-3'>
