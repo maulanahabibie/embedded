@@ -32,7 +32,7 @@ const Navbar = () => {
             onClick={() => setShowLogout(!showLogout)}
           >
             <FaUserCircle  className=''/>
-              <div className='m-0 p-0'>{user?.name}</div>
+              <div className='m-0 p-0'>{user?.username}</div>
             <FaCaretDown />
           </button>
           <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>

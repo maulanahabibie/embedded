@@ -7,6 +7,7 @@ import {GrEdit} from 'react-icons/gr'
 import {FaEraser} from 'react-icons/fa'
 import { MySwal } from '../../../utils'
 import { useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const sw = new MySwal()
 const dataDummy = [
@@ -19,6 +20,9 @@ const dataDummy = [
   {embeddedName: 'Penjualan Opor',  embeddedDescription: 'Penjualan Opor tahun 2020', image: 'https://reactjs.org/logo-og.png', source: 'https://app.powerbi.com/view?r=eyJrIjoiNTY1MzI2OTAtYzgzOS00NTMxLWI2ZmEtYjNmYmQ4Nzg3MWMwIiwidCI6ImZjNzQzMDc1LTkzZWQtNGE1Yy04MmMwLWNhNWVhYzkxNDIyMCIsImMiOjEwfQ%3D%3D'},
 ]
 const AllData = () => {
+  const location = useLocation();
+  const navigate = useNavigate()
+  // console.log(location)
   const {user, userData}= useSelector((store) => store.user);
 
   const[isLoading, setIsLoading]=useState(false)
@@ -48,16 +52,16 @@ const AllData = () => {
     setTimeout(()=> sw.close(), 500)
     setTimeout(()=> setIsLoading(false), 500)
   },[datasReal, datas, search])
-  const onLink = useCallback((param)=>{
-    window.open(param, '_blank').focus();
-  },[])
+  const onLink = useCallback((param, dep, embe)=>{
+    navigate(`${location.pathname}/${dep}/${embe}/${param}`)
+    // window.open(param, '_blank').focus();
+  },[navigate, location])
   useEffect(()=>{
     if(userData.embeddedId){
       setDatas(userData.embeddedId)
       setDatasReal(userData.embeddedId)
     }
   },[userData.embeddedId])
-  
   return (
    <Wrapper>
       <div>
@@ -89,7 +93,7 @@ const AllData = () => {
                         <div className='row w-100'>
                           <h3 className='col-9 m-0 text-truncate text-white fw-bold'>{d.name}</h3>
                           <div className='col-3 text-end p-0'>
-                            <Button className='me-1 btn btn-light' onClick={()=>onLink(d.source)}><FiExternalLink className='text-danger' /></Button>
+                            <Button className='me-1 btn btn-light' onClick={()=>onLink(d.id, d.slugDepartement, d.slug)}><FiExternalLink className='text-danger' /></Button>
                             {/* <Button className='me-1 btn btn-light' onClick={()=>onLink(d.source)}><GrEdit className='text-danger' /></Button>
                             <Button className='btn btn-light' onClick={()=>onLink(d.source)}><FaEraser className='text-danger' /></Button> */}
                           </div>

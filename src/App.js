@@ -36,6 +36,7 @@ function App() {
             <Route path='departement' element={<Category />} />
             <Route path='departement/:slug/:viewType' element={<Embedded />} />
             <Route path='departement/:slug/:viewType/:id' element={<Description />} />
+            <Route path='alldata/:slug/:viewType/:id' element={<Description />} />
             <Route path='admin' element={ 
               <ProtectedAdmin>
                  <Admin />

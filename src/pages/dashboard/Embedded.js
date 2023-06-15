@@ -43,7 +43,7 @@ const Embedded = () => {
     const {isLoading, userData, role}=useSelector((state)=>state.user)
     const {slug, viewType} = useParams()
     const location = useLocation()
-    console.log(location)
+    // console.log(location)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -264,7 +264,6 @@ const Embedded = () => {
                 {!isLoading ? datas.length
                     ?
                     datas.map((d,i)=>{
-                        console.log(d)
                         return(
                             <Col md={6} key={i} className='mb-3 box-sizing' >
                             <div className='bg-danger p-2 rounded w-100' style={{height: '400px'}}>
