@@ -6,7 +6,6 @@ import { listDepartements, listEmbeddeds, listUserById, registerUsersForm, updat
 import { MySwal } from '../../../../utils';
 import { Button } from 'react-bootstrap';
 import { generateIds } from '../../../../config/role';
-import { API_POINT } from '../../../../config/api';
 import { MdAdminPanelSettings } from 'react-icons/md';
         
 
@@ -97,7 +96,8 @@ const Create = () => {
     if(res.code !== '1') return sw.warning(res.msg || 'Failed')
     else{
       sw.success(`${res.msg} ${res.user}` || 'Success');
-      window.location.href = `${API_POINT}admin`;
+      setTimeout(()=>window.location.href=`/admin`,1000)
+     
     }
   },[dataEmbe, dataDepa, multiSelect, dataForm, registerUsersForm, id, viewType])
   const getData = useCallback(async()=>{

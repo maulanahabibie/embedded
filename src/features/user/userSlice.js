@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { CONDITIONAL } from '../../config/api';
+// import { CONDITIONAL } from '../../config/api';
 import {
   addUserToLocalStorage,
   getUserFromLocalStorage,
@@ -28,8 +28,8 @@ const initialState = {
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async (user, thunkAPI) => {
-    if(CONDITIONAL) return registerUserThunk('/auth/local/register', user, thunkAPI);
-    else return registerUserThunk('/auth/register', user, thunkAPI);
+    return registerUserThunk('/auth/local/register', user, thunkAPI);
+    // else return registerUserThunk('/auth/register', user, thunkAPI);
   
   }
 );
@@ -37,8 +37,8 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (user, thunkAPI) => {
-    if(CONDITIONAL) return loginUserThunk('/auth/local', user, thunkAPI);
-    else return loginUserThunk('/auth/login', user, thunkAPI);
+    return loginUserThunk('/auth/local', user, thunkAPI);
+    // else return loginUserThunk('/auth/login', user, thunkAPI);
   }
 );
 
