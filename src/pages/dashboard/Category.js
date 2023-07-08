@@ -81,7 +81,7 @@ const Category = () => {
 
     const onLinkButton = useCallback((param)=>{
         navigate(param)
-    },[])
+    },[navigate])
     const onSubmitModal = useCallback(async(param='')=>{
         sw.loading()
         const newState = {...dataForm}
@@ -177,7 +177,7 @@ const Category = () => {
                 onSubmit: ()=>onSubmitModal('delete', slug)
             }))
         }
-    },[onSubmitModal, datasReal])
+    },[onSubmitModal, datasReal, setModal, setDataForm])
     if(modal.show){
         return(
             <Wrapper>

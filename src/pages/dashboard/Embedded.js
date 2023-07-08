@@ -202,7 +202,7 @@ const Embedded = () => {
             }))
 
         }
-    },[datasReal, onSubmitData])
+    },[datasReal, onSubmitData, setModalShow])
 
     if(modalShow.show){
         return(

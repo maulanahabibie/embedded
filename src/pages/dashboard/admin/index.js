@@ -58,12 +58,12 @@ const Admin = () => {
                 }
             }
         })
-    },[dispatch])
+    },[dispatch, sw, deleteUserForm, loginUserCheck])
 
     const onNavigateValid = useCallback((roleParam, idParam)=>{
         if(roleParam === 'ADMIN') return sw.warning('Cannot Edit User Admin');
         else navigate(`/admin/edit/${idParam}`)
-    },[])
+    },[navigate])
   return (
     <Wrapper>
         <div className="d-flex justify-content-between align-items-center flex-wrap mb-md-5">
